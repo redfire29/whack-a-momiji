@@ -1,12 +1,12 @@
 <template lang="pug">
 div(
-  class="border-[1px] border-gray-700 max-w-[500px] mx-auto flex flex-col h-full justify-between p-[20px]"
+  class="bg-green-700 max-w-[500px] mx-auto flex flex-col h-full justify-between p-[20px]"
 )
   div(
     class="text-[20px] text-center"
   )
     h1(
-      class="text-[30px]"
+      class="text-[30px] uppercase font-bold"
     ) Whack A Momiji
     h2(
       class="text-[24px] font-bold"
@@ -26,26 +26,31 @@ div(
   )
     div(
       v-for="(momiji, index) in momijiList",
-      class="aspect-square border-[1px] border-red-700 relative group",
+      class="aspect-square  relative group",
       :class="{ 'z-30': index > 2}"
     )
       div(
-        class="z-20 absolute rounded-full h-[50px] w-full bottom-0 left-0 bg-green-400 pointer-events-none"
+        class="z-0 absolute rounded-full w-full bottom-0 left-0 pointer-events-none"
       )
+        img(src="~/assets/img/burrow-bg.png", draggable="false")
+      div(
+        class="z-20 absolute rounded-full w-full bottom-0 left-0 pointer-events-none"
+      )
+        img(src="~/assets/img/burrow.png", draggable="false")
       div.momiji(
         @click="whack(index)"
-        class="z-10 absolute bottom-[40px] left-0 w-full overflow-hidden h-0 cursor-pointer px-[10px]"
+        class="z-10 absolute bottom-[14px] left-0 w-full overflow-hidden max-h-0 cursor-pointer px-[10px]"
       )
         div(
           v-if="!momiji.chestnut"
         )
-          img(src="~/assets/img/demo2.jpg", draggable="false", v-if="!momiji.whack")
-          img(src="~/assets/img/demo.jpg", draggable="false", v-else)
+          img(src="~/assets/img/momiji.png", draggable="false", v-if="!momiji.whack")
+          img(src="~/assets/img/momiji-whack.png", draggable="false", v-else)
         div(
           v-else
         )
-          img(src="~/assets/img/chestnut.jpg", draggable="false", v-if="!momiji.whack")
-          img(src="~/assets/img/chestnut.jpg", draggable="false", v-else)
+          img(src="~/assets/img/neru.png", draggable="false", v-if="!momiji.whack")
+          img(src="~/assets/img/neru-whack.png", draggable="false", v-else)
 </template>
 
 <script setup>
@@ -108,12 +113,12 @@ const setWhackTime = () => {
             value.chestnut = true;
             gsap.to(document.querySelectorAll('.momiji')[index], useRandom(1.5, 4), {
               ease: 'power3.in',
-              height: '100%',
+              'max-height': '100%',
               onComplete: () => {
                 if (value.isAnimate) {
                   gsap.to(document.querySelectorAll('.momiji')[index], 0.5, {
                     ease: 'power3.out',
-                    height: '0px',
+                    'max-height': '0px',
                     onComplete: () => {
                       value.isAnimate = false;
                       value.chestnut = false;
@@ -126,12 +131,12 @@ const setWhackTime = () => {
             value.chestnut = false;
             gsap.to(document.querySelectorAll('.momiji')[index], useRandom(1, 5), {
               ease: 'power3.in',
-              height: '100%',
+              'max-height': '100%',
               onComplete: () => {
                 if (value.isAnimate) {
                   gsap.to(document.querySelectorAll('.momiji')[index], 1, {
                     ease: 'power3.out',
-                    height: '0px',
+                    'max-height': '0px',
                     onComplete: () => {
                       value.isAnimate = false;
                     }
@@ -155,7 +160,7 @@ const setWhackTime = () => {
       useForEach(momijiList, (value, index) => {
         gsap.to(document.querySelectorAll('.momiji')[index], 0.1, {
           ease: 'power3.out',
-          height: '0px',
+          'max-height': '0px',
           onComplete: () => {
             value.isAnimate = false;
           }
@@ -186,7 +191,7 @@ const whack = (index) => {
       })
       gsap.to(document.querySelectorAll('.momiji')[index], 2, {
         ease: 'power3.out',
-        height: '0px',
+        'max-height': '0px',
         onComplete: () => {
           gsap.killTweensOf(document.querySelectorAll('.momiji')[index]);
           gsap.killTweensOf(document.querySelectorAll('.momiji img')[index]);
