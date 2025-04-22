@@ -17,7 +17,10 @@ div(
       class="hover:bg-slate-400 hover:text-slate-700"
       @click="setWhackTime"
     ) START
-    p {{`時間倒數：${countdown}s`}}
+    p(
+      v-else
+      class="text-[18px] font-bold mt-[40px] py-[10px] border-[1px] bg-slate-600 text-white"
+    ) {{`時間倒數：${countdown}s`}}
   div(
     class="flex-none grid-cols-3 grid gap-[10px] "
   )
@@ -33,9 +36,16 @@ div(
         @click="whack(index)"
         class="z-10 absolute bottom-[40px] left-0 w-full overflow-hidden h-0 cursor-pointer px-[10px]"
       )
-        img(src="~/assets/img/demo2.jpg", draggable="false", v-if="!momiji.whack && !momiji.chestnut")
-        img(src="~/assets/img/demo.jpg", draggable="false", v-else-if="!momiji.chestnut")
-        img(src="~/assets/img/chestnut.jpg", draggable="false", v-else)
+        div(
+          v-if="!momiji.chestnut"
+        )
+          img(src="~/assets/img/demo2.jpg", draggable="false", v-if="!momiji.whack")
+          img(src="~/assets/img/demo.jpg", draggable="false", v-else)
+        div(
+          v-else
+        )
+          img(src="~/assets/img/chestnut.jpg", draggable="false", v-if="!momiji.whack")
+          img(src="~/assets/img/chestnut.jpg", draggable="false", v-else)
 </template>
 
 <script setup>
@@ -89,7 +99,6 @@ const setWhackTime = () => {
     useForEach(momijiList, (value, index) => {
       const setWT = setInterval(() => {
         if (!value.isAnimate) {
-          console.log(index, 'momiji');
           value.isAnimate = true;
           if (momijiList[index].whack) {
             momijiList[index].whack = false;
@@ -97,9 +106,9 @@ const setWhackTime = () => {
           if (useRandom(1, 5) > 4) {
             chestnutShow.value = true;
             value.chestnut = true;
-            gsap.to(document.querySelectorAll('.momiji')[index], 2, {
+            gsap.to(document.querySelectorAll('.momiji')[index], useRandom(1.5, 4), {
               ease: 'power3.in',
-              height: '106px',
+              height: '100%',
               onComplete: () => {
                 if (value.isAnimate) {
                   gsap.to(document.querySelectorAll('.momiji')[index], 0.5, {
@@ -117,7 +126,7 @@ const setWhackTime = () => {
             value.chestnut = false;
             gsap.to(document.querySelectorAll('.momiji')[index], useRandom(1, 5), {
               ease: 'power3.in',
-              height: '150px',
+              height: '100%',
               onComplete: () => {
                 if (value.isAnimate) {
                   gsap.to(document.querySelectorAll('.momiji')[index], 1, {
@@ -154,7 +163,6 @@ const setWhackTime = () => {
       })
       clearInterval(countDownSet);
       startOn.value = false;
-      console.log('time out');
     }, 10000)
   }
 }
