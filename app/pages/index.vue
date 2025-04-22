@@ -27,11 +27,11 @@ div(
       :class="{ 'z-30': index > 2}"
     )
       div(
-        class="z-20 absolute rounded-full h-[50px] w-full bottom-0 left-0 bg-green-400"
+        class="z-20 absolute rounded-full h-[50px] w-full bottom-0 left-0 bg-green-400 pointer-events-none"
       )
       div.momiji(
         @click="whack(index)"
-        class="z-10 absolute bottom-[40px] left-0 w-full overflow-hidden h-0 cursor-pointer"
+        class="z-10 absolute bottom-[40px] left-0 w-full overflow-hidden h-0 cursor-pointer px-[10px]"
       )
         img(src="~/assets/img/demo2.jpg", draggable="false", v-if="!momiji.chestnut")
         img(src="~/assets/img/chestnut.jpg", draggable="false", v-else)
@@ -98,7 +98,7 @@ const setWhackTime = () => {
             value.chestnut = true;
             gsap.to(document.querySelectorAll('.momiji')[index], 2, {
               ease: 'power3.in',
-              height: '200px',
+              height: '106px',
               onComplete: () => {
                 if (value.isAnimate) {
                   gsap.to(document.querySelectorAll('.momiji')[index], 0.5, {
@@ -116,7 +116,7 @@ const setWhackTime = () => {
             value.chestnut = false;
             gsap.to(document.querySelectorAll('.momiji')[index], useRandom(1, 5), {
               ease: 'power3.in',
-              height: '200px',
+              height: '150px',
               onComplete: () => {
                 if (value.isAnimate) {
                   gsap.to(document.querySelectorAll('.momiji')[index], 1, {
@@ -158,6 +158,7 @@ const setWhackTime = () => {
   }
 }
 
+
 const whack = (index) => {
   if (!momijiList[index].whack) {
     momijiList[index].whack = true;
@@ -166,14 +167,24 @@ const whack = (index) => {
     } else {
       score.value += 100;
     }
-    gsap.to(document.querySelectorAll('.momiji')[index], 0.1, {
-      ease: 'power3.out',
-      height: '0px',
-      onComplete: () => {
-        gsap.killTweensOf(document.querySelectorAll('.momiji')[index]);
-        momijiList[index].isAnimate = false;
-      }
-    })
+    gsap.killTweensOf(document.querySelectorAll('.momiji')[index]);
+    setTimeout(() => {
+      gsap.to(document.querySelectorAll('.momiji img')[index], 0.1, {
+        x: 5,
+        ease: 'none',
+        repeat: -1,
+        yoyo: true,
+      })
+      gsap.to(document.querySelectorAll('.momiji')[index], 2, {
+        ease: 'power3.out',
+        height: '0px',
+        onComplete: () => {
+          gsap.killTweensOf(document.querySelectorAll('.momiji')[index]);
+          gsap.killTweensOf(document.querySelectorAll('.momiji img')[index]);
+          momijiList[index].isAnimate = false;
+        }
+      })
+    }, 10)
   }
 }
 
