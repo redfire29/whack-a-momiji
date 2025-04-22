@@ -24,5 +24,6 @@ export default defineNuxtConfig({
   },
   app: {
     baseURL: '/whack-a-momiji/',
+    buildAssetsDir: '/static/',
   }
 })
