@@ -33,7 +33,8 @@ div(
         @click="whack(index)"
         class="z-10 absolute bottom-[40px] left-0 w-full overflow-hidden h-0 cursor-pointer px-[10px]"
       )
-        img(src="~/assets/img/demo2.jpg", draggable="false", v-if="!momiji.chestnut")
+        img(src="~/assets/img/demo2.jpg", draggable="false", v-if="!momiji.whack && !momiji.chestnut")
+        img(src="~/assets/img/demo.jpg", draggable="false", v-else-if="!momiji.chestnut")
         img(src="~/assets/img/chestnut.jpg", draggable="false", v-else)
 </template>
 
