@@ -19,4 +19,7 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
+  app: {
+    baseURL: '/whack-a-momiji/',
+  }
 })

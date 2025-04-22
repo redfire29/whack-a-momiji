@@ -12,10 +12,12 @@ div(
       class="text-[24px] font-bold"
     ) {{`score: ${score}`}}
     p(
+      v-if="!startOn"
       class="text-[18px] font-bold mt-[40px] py-[10px] cursor-pointer border-[1px] bg-slate-600 text-white"
       class="hover:bg-slate-400 hover:text-slate-700"
       @click="setWhackTime"
     ) START
+    p {{`時間倒數：${countdown}s`}}
   div(
     class="flex-none grid-cols-3 grid gap-[10px] "
   )
@@ -31,7 +33,7 @@ div(
         @click="whack(index)"
         class="z-10 absolute bottom-0 left-0 w-full overflow-hidden h-0 cursor-pointer"
       )
-        img(src="~/assets/img/demo.jpg", draggable="false")
+        img(src="~/assets/img/demo2.jpg", draggable="false")
 </template>
 
 <script setup>
@@ -65,38 +67,64 @@ const momijiList = [
   }
 ]
 
+const countdown = ref(10.0);
+const startOn = ref(false);
 const setWhackTime = () => {
-  score.value = 0;
-  const timeArray = [];
-  useForEach(momijiList, (value, index) => {
-    const setWT = setInterval(() => {
-      if (!value.isAnimate) {
-        value.isAnimate = true;
-        if (momijiList[index].whack) {
-          momijiList[index].whack = false;
-        }
-        gsap.to(document.querySelectorAll('.momiji')[index], useRandom(3, 5), {
-          ease: 'power3.in',
-          height: '200px',
-          onComplete: () => {
-            gsap.to(document.querySelectorAll('.momiji')[index], 1, {
-              ease: 'power3.out',
-              height: '0px',
-              onComplete: () => {
-                value.isAnimate = false;
+  if (!startOn.value) {
+    startOn.value = true;
+    gsap.killTweensOf('.momiji');
+    score.value = 0;
+    countdown.value = 10.0
+    const timeArray = [];
+    useForEach(momijiList, (value, index) => {
+      const setWT = setInterval(() => {
+        if (!value.isAnimate) {
+          console.log(index, 'momiji');
+          value.isAnimate = true;
+          if (momijiList[index].whack) {
+            momijiList[index].whack = false;
+          }
+          gsap.to(document.querySelectorAll('.momiji')[index], useRandom(3, 5), {
+            ease: 'power3.in',
+            height: '200px',
+            onComplete: () => {
+              if (value.isAnimate) {
+                gsap.to(document.querySelectorAll('.momiji')[index], 1, {
+                  ease: 'power3.out',
+                  height: '0px',
+                  onComplete: () => {
+                    value.isAnimate = false;
+                  }
+                })
               }
-            })
+            }
+          })
+        }
+      }, 500);
+      timeArray.push(setWT);
+    })
+    const countDownSet = setInterval(() => {
+      countdown.value = (countdown.value - 0.1).toFixed(1);
+    }, 100)
+    setTimeout(() => {
+      useForEach(timeArray, (value) => {
+        clearInterval(value);
+      })
+      gsap.killTweensOf('.momiji');
+      useForEach(momijiList, (value, index) => {
+        gsap.to(document.querySelectorAll('.momiji')[index], 0.1, {
+          ease: 'power3.out',
+          height: '0px',
+          onComplete: () => {
+            value.isAnimate = false;
           }
         })
-      }
-    }, 500);
-    timeArray.push(setWT);
-  })
-  setTimeout(() => {
-    useForEach(timeArray, (value) => {
-      clearInterval(value);
-    })
-  }, 10000)
+      })
+      clearInterval(countDownSet);
+      startOn.value = false;
+      console.log('time out');
+    }, 10000)
+  }
 }
 
 const whack = (index) => {
