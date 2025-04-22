@@ -140,4 +140,8 @@ const whack = (index) => {
     })
   }
 }
+
+useHead({
+  title: 'Whack A Momiji'
+})
 </script>

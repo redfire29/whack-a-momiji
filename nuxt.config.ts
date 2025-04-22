@@ -19,6 +19,9 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
+  routeRules: {
+    '/': { static: true, prerender: true },
+  },
   app: {
     baseURL: '/whack-a-momiji/',
   }
