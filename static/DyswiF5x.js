@@ -1,0 +1,1 @@
+import{t as s,v as t,x as o,K as a,_ as c}from"./DF-CJKLs.js";const l={class:"flex flex-col h-full"},r={class:"flex-1"};function n(e,f){return t(),s("div",l,[o("div",r,[a(e.$slots,"default")])])}const d={},i=c(d,[["render",n]]);export{i as default};
