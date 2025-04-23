@@ -5,3 +5,15 @@
 html, body, #__nuxt {
   @apply h-full
 }
+
+@keyframes whack {
+  from {
+    opacity: 0;
+    top: 50%;
+  }
+
+  to {
+    opacity: 1;
+    top: 10%;
+  }
+}
