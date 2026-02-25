@@ -27,8 +27,7 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9 # 使用 pnpm 9，或是能符合您專案需求的版本
+        # 已從 package.json 的 "packageManager" 自動讀取版本，不需在此指定 version
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
